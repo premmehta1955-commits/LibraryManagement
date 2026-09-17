@@ -1,0 +1,168 @@
+@model LibraryManagement.Models.LibraryMember
+
+@{
+    ViewData["Title"] = "Book Details";
+
+    var status = Model.GetDueStatus();
+    var fine = Model.CalculateFine();
+    var dueDate = Model.GetDueDate();
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">Book Issue Details</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <h5 class="border-bottom pb-2">
+                        Member Information
+                    </h5>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <strong>Member Name:</strong>
+                            <p>@Model.MemberName</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Department:</strong>
+                            <p>@Model.Department</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Email:</strong>
+                            <p>@Model.Email</p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Book ID:</strong>
+                            <p>@Model.BookId</p>
+                        </div>
+
+                    </div>
+
+                    <h5 class="border-bottom pb-2">
+                        Issue Information
+                    </h5>
+
+                    <div class="row mb-3">
+
+                        <div class="col-md-6">
+                            <strong>Issue Date:</strong>
+                            <p>
+                                @Model.IssueDate.ToString("dd-MM-yyyy")
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Due Date:</strong>
+                            <p>
+                                @dueDate.ToString("dd-MM-yyyy")
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Return Date:</strong>
+                            <p>
+                                @if (Model.ReturnDate.HasValue)
+                                {
+                                    @Model.ReturnDate.Value.ToString("dd-MM-yyyy")
+                                }
+                                else
+                                {
+                                    <span>Not Returned</span>
+                                }
+                            </p>
+                        </div>
+
+                        <div class="col-md-6">
+                            <strong>Due Status:</strong>
+
+                            <p>
+                                @if (status == "Returned")
+                                {
+                                    <span class="badge bg-success">
+                                        Returned
+                                    </span>
+                                }
+                                else if (status == "Due Soon")
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        Due Soon
+                                    </span>
+                                }
+                                else if (status == "Overdue")
+                                {
+                                    <span class="badge bg-danger">
+                                        Overdue
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary">
+                                        Issued
+                                    </span>
+                                }
+                            </p>
+                        </div>
+
+                    </div>
+
+                    @if (status == "Returned")
+                    {
+                        <div class="alert alert-success">
+                            <strong>Book Returned!</strong>
+                            The book has been successfully returned.
+                        </div>
+                    }
+                    else if (status == "Due Soon")
+                    {
+                        <div class="alert alert-warning">
+                            <strong>Due Soon!</strong>
+                            This book is approaching its due date.
+                        </div>
+                    }
+                    else if (status == "Overdue")
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Overdue!</strong>
+                            This book is overdue.
+
+                            @if (fine > 0)
+                            {
+                                <br />
+                                <strong>
+                                    Fine Amount: ₹@fine
+                                </strong>
+                            }
+                        </div>
+                    }
+
+                    <div class="mt-3">
+
+                        <a asp-controller="Library"
+                           asp-action="Index"
+                           class="btn btn-secondary">
+                            Back to Issued Books
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

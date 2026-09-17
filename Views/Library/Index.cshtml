@@ -1,0 +1,159 @@
+@model List<LibraryManagement.Models.LibraryMember>
+
+@{
+    ViewData["Title"] = "Issued Books";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>College Library - Issued Books</h2>
+
+        <div>
+            <a asp-controller="Library"
+               asp-action="IssueBook"
+               class="btn btn-primary">
+                Issue New Book
+            </a>
+
+            <a asp-controller="Library"
+               asp-action="About"
+               class="btn btn-secondary">
+                About Library
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Issued Book Information</h5>
+        </div>
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped table-hover">
+
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Member</th>
+                            <th>Department</th>
+                            <th>Book</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Return Date</th>
+                            <th>Status</th>
+                            <th>Fine</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var member in Model)
+                        {
+                            var status = member.GetDueStatus();
+                            var fine = member.CalculateFine();
+                            var dueDate = member.GetDueDate();
+
+                            <tr>
+                                <td>@member.MemberName</td>
+
+                                <td>@member.Department</td>
+
+                                <td>
+                                    Book ID: @member.BookId
+                                </td>
+
+                                <td>
+                                    @member.IssueDate.ToString("dd-MM-yyyy")
+                                </td>
+
+                                <td>
+                                    @dueDate.ToString("dd-MM-yyyy")
+                                </td>
+
+                                <td>
+                                    @if (member.ReturnDate.HasValue)
+                                    {
+                                        @member.ReturnDate.Value.ToString("dd-MM-yyyy")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Not Returned</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (status == "Returned")
+                                    {
+                                        <span class="badge bg-success">
+                                            Returned
+                                        </span>
+                                    }
+                                    else if (status == "Due Soon")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Due Soon
+                                        </span>
+                                    }
+                                    else if (status == "Overdue")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Overdue
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary">
+                                            Issued
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @if (fine > 0)
+                                    {
+                                        <span class="text-danger fw-bold">
+                                            ₹@fine
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span>₹0</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <a asp-controller="Library"
+                                       asp-action="BookDetails"
+                                       asp-route-id="@member.BookId"
+                                       class="btn btn-sm btn-info text-white">
+                                        Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "About Library";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-9">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">About College Library</h2>
+                </div>
+
+                <div class="card-body">
+
+                    <h4>College Library</h4>
+
+                    <p>
+                        The College Library provides students and faculty
+                        with access to books, study materials and other
+                        educational resources.
+                    </p>
+
+                    <p>
+                        This Library Management System helps librarians
+                        manage book issues, return dates and overdue fines.
+                    </p>
+
+                    <h5>Library Features</h5>
+
+                    <ul>
+                        <li>Issue books to students</li>
+                        <li>Track issued books</li>
+                        <li>Track issue and return dates</li>
+                        <li>Calculate due dates</li>
+                        <li>Identify overdue books</li>
+                        <li>Calculate overdue fines</li>
+                    </ul>
+
+                    <div class="mt-4">
+
+                        <a asp-controller="Library"
+                           asp-action="Index"
+                           class="btn btn-primary">
+                            Back to Library
+                        </a>
+
+                        <a asp-controller="Library"
+                           asp-action="IssueBook"
+                           class="btn btn-success">
+                            Issue a Book
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
